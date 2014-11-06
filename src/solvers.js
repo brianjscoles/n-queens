@@ -65,6 +65,7 @@ window.countNRooksSolutions = function(n) {
       //increment solution count;
 
       solutionCount++;
+      //and then rewind
 
     } else {
 
@@ -76,6 +77,8 @@ window.countNRooksSolutions = function(n) {
         //if it's safe (check row and col conflicts)
         if(!board.hasRowConflictAt(currentRow) && !board.hasColConflictAt(i)){
           placeNextRook(currentRow+1);
+          //remove piece
+          board.togglePiece(currentRow,i);
 
         // else - it's not safe - remove it.
         } else {
