@@ -156,13 +156,9 @@ window.countNQueensSolutions = function(n) {
         if(!board.hasAnyQueenConflictsOn(currentRow,currentCol)){
           placeNextQueen(currentRow + 1);
 
-          //remove safe piece to explore other possibilities
-          board.togglePiece(currentRow, currentCol);
-
-        // else - it's not safe - remove it.
-        } else {
-          board.togglePiece(currentRow,currentCol);
         }
+        //remove piece from board
+        board.togglePiece(currentRow,currentCol);
       }
     }
   };
@@ -171,5 +167,42 @@ window.countNQueensSolutions = function(n) {
   console.log("runtime for " + n + "queens was " + ((Date.now()-startTime)/1000)+" sec");
   return solutionCount;
 };
+
+window.bitwiseCountNQueensSolutions = function(n) {
+  var startTime = Date.now();
+  var solutionCount = 0;
+
+  var Check = function(columns)
+
+
+  //recursive function(currentRow)
+  var placeNextQueen = function(currentRow){
+
+    if (currentRow===n){
+      //return board;
+      solutionCount++;
+    } else {
+
+    //for each space on next row:
+      for (var currentCol = 0; currentCol < n; currentCol++) {
+        //place queen there.
+        board.togglePiece(currentRow,currentCol);
+
+        //if it's safe (check row and col conflicts)
+        //then make a recursive call
+        if(!board.hasAnyQueenConflictsOn(currentRow,currentCol)){
+          placeNextQueen(currentRow + 1);
+
+        }
+        //remove piece from board
+        board.togglePiece(currentRow,currentCol);
+      }
+    }
+  };
+  placeNextQueen(0);
+  console.log("runtime for " + n + "queens was " + ((Date.now()-startTime)/1000)+" sec");
+  return solutionCount;
+};
+
 
 
