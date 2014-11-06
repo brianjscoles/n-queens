@@ -133,8 +133,9 @@
       var attr = this.attributes;
       var result = [];
       for (var i = 0; i < attr.n; i++) {
-        if (colIndex + i < attr.n) {
-          result.push(attr[i][colIndex + i]);
+        var spaceTaken =  attr[i][colIndex + i];
+        if (spaceTaken !== undefined) {
+          result.push(spaceTaken);
         }
       }
       var sum = result.reduce(function(a,b){
@@ -164,8 +165,9 @@
       var attr = this.attributes;
       var result = [];
       for (var i = 0; i < attr.n; i++) {
-        if (colIndex - i > -1) {
-          result.push(attr[i][colIndex - i]);
+        var spaceTaken =  attr[i][colIndex - i];
+        if (spaceTaken !== undefined) {
+          result.push(spaceTaken);
         }
       }
       var sum = result.reduce(function(a,b){
