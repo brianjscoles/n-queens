@@ -163,27 +163,28 @@ window.countNQueensSolutions = function(n) {
     if (currentRow===n){
       //return board;
       solutionCount++;
-    }
+    } else {
 
     //for each space on next row:
-    for (var i = 0; i < board.attributes.n; i++) {
-      //place queen there.
-      board.togglePiece(currentRow,i);
-
-      //if it's safe (check row and col conflicts)
-      //then make a recursive call
-      if(!board.hasRowConflictAt(currentRow) &&
-         !board.hasColConflictAt(i) &&
-         !board.hasMajorDiagonalConflictAt(i - currentRow) &&
-         !board.hasMinorDiagonalConflictAt(currentRow + i)){
-        placeNextQueen(currentRow + 1);
-
-        //remove safe piece to explore other possibilities
-        board.togglePiece(currentRow, i);
-
-      // else - it's not safe - remove it.
-      } else {
+      for (var i = 0; i < board.attributes.n; i++) {
+        //place queen there.
         board.togglePiece(currentRow,i);
+
+        //if it's safe (check row and col conflicts)
+        //then make a recursive call
+        if(!board.hasRowConflictAt(currentRow) &&
+           !board.hasColConflictAt(i) &&
+           !board.hasMajorDiagonalConflictAt(i - currentRow) &&
+           !board.hasMinorDiagonalConflictAt(currentRow + i)){
+          placeNextQueen(currentRow + 1);
+
+          //remove safe piece to explore other possibilities
+          board.togglePiece(currentRow, i);
+
+        // else - it's not safe - remove it.
+        } else {
+          board.togglePiece(currentRow,i);
+        }
       }
     }
   };
