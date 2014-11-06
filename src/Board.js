@@ -41,6 +41,10 @@
       return this.hasAnyRowConflicts() || this.hasAnyColConflicts();
     },
 
+    hasAnyRooksConflictsAt: function(row,col) {
+      return this.hasRowConflictAt(row) || this.hasColConflictAt(col);
+    },
+
     hasAnyQueenConflictsOn: function(rowIndex, colIndex) {
       return (
         this.hasRowConflictAt(rowIndex) ||
@@ -105,6 +109,7 @@
       var sum = 0;
       for (var i = 0; i < this.attributes.n; i++) {
         sum += this.attributes[i][colIndex];
+        if(sum>1){ return true;}
       }
       return sum>1;
     },

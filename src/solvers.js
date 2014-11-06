@@ -73,7 +73,7 @@ window.countNRooksSolutions = function(n) {
         board.togglePiece(currentRow,currentCol);
 
         //if it's safe (check row and col conflicts)
-        if(!board.hasAnyRooksConflicts(currentRow, currentCol)){
+        if(!board.hasAnyRooksConflictsAt(currentRow, currentCol)){
           placeNextRook(currentRow+1);
           //remove piece
           board.togglePiece(currentRow,currentCol);
