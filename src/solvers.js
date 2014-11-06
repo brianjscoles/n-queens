@@ -14,19 +14,79 @@
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n rooks placed such that none of them can attack each other
 
 window.findNRooksSolution = function(n) {
-  var solution = undefined; //fixme
+  var board = new Board({"n":n});
 
-  console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
-  return solution;
+  //recursive function(currentRow)
+  var placeNextRook = function(currentRow){
+    if (currentRow===n){
+      //return board;
+      var result = [];
+      for (var i = 0; i < board.attributes.n; i++) {
+        result.push(board.attributes[i]);
+      }
+      return result;
+    }
+
+    //for each space on next row:
+    for (var i = 0; i < board.attributes.n; i++) {
+      //place rook there.
+      board.togglePiece(currentRow,i);
+
+      //if it's safe (check row and col conflicts)
+      if(!board.hasRowConflictAt(currentRow) && !board.hasColConflictAt(i)){
+        var result = placeNextRook(currentRow + 1);
+        if(result !== undefined){
+          return result;
+        }
+
+      // else - it's not safe - remove it.
+      } else {
+        board.togglePiece(currentRow,i);
+      }
+    }
+  };
+
+  var solvedBoard = placeNextRook(0);
+
+  console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solvedBoard));
+  return solvedBoard;
 };
 
 
 
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
 window.countNRooksSolutions = function(n) {
-  var solutionCount = undefined; //fixme
+  var solutionCount = 0;
+  var board = new Board({"n":n});
 
-  console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
+  //recursive function(currentRow)
+  var placeNextRook = function(currentRow){
+    if (currentRow===n){
+      //increment solution count;
+
+      solutionCount++;
+
+    } else {
+
+    //for each space on next row:
+      for (var i = 0; i < board.attributes.n; i++) {
+        //place rook there.
+        board.togglePiece(currentRow,i);
+
+        //if it's safe (check row and col conflicts)
+        if(!board.hasRowConflictAt(currentRow) && !board.hasColConflictAt(i)){
+          placeNextRook(currentRow+1);
+
+        // else - it's not safe - remove it.
+        } else {
+          board.togglePiece(currentRow,i);
+        }
+      }
+    }
+  };
+
+  placeNextRook(0);
+
   return solutionCount;
 };
 
