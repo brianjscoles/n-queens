@@ -20,30 +20,26 @@ window.findNRooksSolution = function(n) {
   var placeNextRook = function(currentRow){
     if (currentRow===n){
       //return board;
-      var result = [];
-      for (var i = 0; i < board.attributes.n; i++) {
-        result.push(board.attributes[i]);
-      }
-      return result;
+      return board.rows();
     }
 
     //for each space on next row:
-    for (var i = 0; i < board.attributes.n; i++) {
+    for (var currentCol = 0; currentCol < n; currentCol++) {
       //place rook there.
-      board.togglePiece(currentRow,i);
+      board.togglePiece(currentRow,currentCol);
 
       //if it's safe (check row and col conflicts)
-      if(!board.hasRowConflictAt(currentRow) && !board.hasColConflictAt(i)){
+      if(!board.hasAnyRooksConflicts(currentRow, currentCol)){
         var result = placeNextRook(currentRow + 1);
         if(result !== undefined){
           return result;
         }
         //remove safe piece to explore other possibilities
-        board.togglePiece(currentRow, i);
+        board.togglePiece(currentRow, currentCol);
 
       // else - it's not safe - remove it.
       } else {
-        board.togglePiece(currentRow,i);
+        board.togglePiece(currentRow,currentCol);
       }
     }
   };
@@ -72,19 +68,19 @@ window.countNRooksSolutions = function(n) {
     } else {
 
     //for each space on next row:
-      for (var i = 0; i < board.attributes.n; i++) {
+      for (var currentCol = 0; currentCol < n; currentCol++) {
         //place rook there.
-        board.togglePiece(currentRow,i);
+        board.togglePiece(currentRow,currentCol);
 
         //if it's safe (check row and col conflicts)
-        if(!board.hasRowConflictAt(currentRow) && !board.hasColConflictAt(i)){
+        if(!board.hasAnyRooksConflicts(currentRow, currentCol)){
           placeNextRook(currentRow+1);
           //remove piece
-          board.togglePiece(currentRow,i);
+          board.togglePiece(currentRow,currentCol);
 
         // else - it's not safe - remove it.
         } else {
-          board.togglePiece(currentRow,i);
+          board.togglePiece(currentRow,currentCol);
         }
       }
     }
@@ -107,48 +103,32 @@ window.findNQueensSolution = function(n) {
 
     if (currentRow===n){
       //return board;
-      var result = [];
-      for (var i = 0; i < board.attributes.n; i++) {
-        result.push(board.attributes[i]);
-      }
-      return result;
+      return board.rows();
     }
 
     //for each space on next row:
-    for (var i = 0; i < board.attributes.n; i++) {
+    for (var currentCol = 0; currentCol < n; currentCol++) {
       //place queen there.
-      board.togglePiece(currentRow,i);
+      board.togglePiece(currentRow,currentCol);
 
       //if it's safe (check row and col conflicts)
       //then make a recursive call
-      if(!board.hasRowConflictAt(currentRow) &&
-         !board.hasColConflictAt(i) &&
-         !board.hasMajorDiagonalConflictAt(i - currentRow) &&
-         !board.hasMinorDiagonalConflictAt(currentRow + i)){
+      if(!board.hasAnyQueenConflictsOn(currentRow,currentCol)){
         var result = placeNextQueen(currentRow + 1);
         if(result !== undefined){
           return result;
         }
         //remove safe piece to explore other possibilities
-        board.togglePiece(currentRow, i);
+        board.togglePiece(currentRow, currentCol);
 
       // else - it's not safe - remove it.
       } else {
-        board.togglePiece(currentRow,i);
+        board.togglePiece(currentRow,currentCol);
       }
     }
   };
 
-  var solvedBoard = placeNextQueen(0);
-  if (solvedBoard===undefined){
-    var result = [];
-    for (var i = 0; i < board.attributes.n; i++) {
-      result.push(board.attributes[i]);
-    }
-    solvedBoard=result;
-  }
-
-  return solvedBoard;
+  return placeNextQueen(0) || board.rows();
 };
 
 
@@ -166,24 +146,21 @@ window.countNQueensSolutions = function(n) {
     } else {
 
     //for each space on next row:
-      for (var i = 0; i < board.attributes.n; i++) {
+      for (var currentCol = 0; currentCol < n; currentCol++) {
         //place queen there.
-        board.togglePiece(currentRow,i);
+        board.togglePiece(currentRow,currentCol);
 
         //if it's safe (check row and col conflicts)
         //then make a recursive call
-        if(!board.hasRowConflictAt(currentRow) &&
-           !board.hasColConflictAt(i) &&
-           !board.hasMajorDiagonalConflictAt(i - currentRow) &&
-           !board.hasMinorDiagonalConflictAt(currentRow + i)){
+        if(!board.hasAnyQueenConflictsOn(currentRow,currentCol)){
           placeNextQueen(currentRow + 1);
 
           //remove safe piece to explore other possibilities
-          board.togglePiece(currentRow, i);
+          board.togglePiece(currentRow, currentCol);
 
         // else - it's not safe - remove it.
         } else {
-          board.togglePiece(currentRow,i);
+          board.togglePiece(currentRow,currentCol);
         }
       }
     }
