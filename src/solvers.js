@@ -73,15 +73,13 @@ window.countNRooksSolutions = function(n) {
         board.togglePiece(currentRow,currentCol);
 
         //if it's safe (check row and col conflicts)
-        if(!board.hasAnyRooksConflictsAt(currentRow, currentCol)){
+        if(!board
+           .hasAnyRooksConflictsAt(currentRow, currentCol)){
           placeNextRook(currentRow+1);
           //remove piece
-          board.togglePiece(currentRow,currentCol);
-
-        // else - it's not safe - remove it.
-        } else {
-          board.togglePiece(currentRow,currentCol);
         }
+        // else - it's not safe - remove it.
+        board.togglePiece(currentRow,currentCol);
       }
     }
   };
@@ -171,38 +169,25 @@ window.countNQueensSolutions = function(n) {
 window.bitwiseCountNQueensSolutions = function(n) {
   var startTime = Date.now();
   var solutionCount = 0;
+  var all = Math.pow(2, n) - 1;
 
-  var Check = function(columns)
-
-
-  //recursive function(currentRow)
-  var placeNextQueen = function(currentRow){
-
-    if (currentRow===n){
-      //return board;
+  var recurse = function(ld, col, rd, rows) {
+    if (rows === n) {
       solutionCount++;
     } else {
+      var poss = ~(ld | col | rd) & all;
 
-    //for each space on next row:
-      for (var currentCol = 0; currentCol < n; currentCol++) {
-        //place queen there.
-        board.togglePiece(currentRow,currentCol);
+      while(poss) {
 
-        //if it's safe (check row and col conflicts)
-        //then make a recursive call
-        if(!board.hasAnyQueenConflictsOn(currentRow,currentCol)){
-          placeNextQueen(currentRow + 1);
+        var choice = poss & -poss;
+        poss -= choice;
 
-        }
-        //remove piece from board
-        board.togglePiece(currentRow,currentCol);
+        recurse((ld | choice)<<1, col | choice, (rd | choice)>>1, rows+1);
+
       }
     }
   };
-  placeNextQueen(0);
+  recurse(0, 0, 0, 0);
   console.log("runtime for " + n + "queens was " + ((Date.now()-startTime)/1000)+" sec");
   return solutionCount;
 };
-
-
-
